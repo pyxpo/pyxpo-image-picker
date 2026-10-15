@@ -1,6 +1,6 @@
 # pyxpo-image-picker
 
-Photo library picker for pyxpo apps (expo-image-picker shape).
+Photo library picker and camera for pyxpo apps (expo-image-picker shape).
 
 This is an optional [pyxpo](https://github.com/ivishalchaubey/pyxpo) native module. Apps that do not
 list it carry none of its code, permissions or dependencies.
@@ -27,9 +27,23 @@ sources into the native project and its Python package into the app.
 from pyxpo_image_picker import ImagePicker
 
 res = await ImagePicker.launchImageLibraryAsync(allowsMultipleSelection=True, selectionLimit=5)
+shot = await ImagePicker.launchCameraAsync(mediaTypes="images")   # or "videos", videoMaxDuration=30
+perm = await ImagePicker.requestCameraPermissionsAsync()          # {"status", "granted", "canAskAgain", "expires"}
 ```
 
-Permissions and Info.plist keys: none (uses the system photo picker).
+Permissions and Info.plist keys:
+
+- Library: none (uses the system photo picker).
+- Camera, iOS: `NSCameraUsageDescription` and, for video sound, `NSMicrophoneUsageDescription`. Set the text with
+  `[tool.pyxpo.module_options.image-picker] cameraUsageDescription = "..."` / `microphoneUsageDescription = "..."`.
+  On a device without a camera (simulators before iOS 27) `launchCameraAsync` fails with a clear error.
+- Camera, Android: none. The module uses the system camera app (`ACTION_IMAGE_CAPTURE` / `ACTION_VIDEO_CAPTURE`), which
+  needs no permission, so it does not declare `CAMERA`. Android enforces `CAMERA` for those intents only when the app
+  declares it; if your app (or another module) does, `launchCameraAsync` asks for it first and the permission functions
+  report its real state. Photo and video in one capture (`mediaTypes=["images", "videos"]`) is iOS only and raises
+  `NotSupportedError` on Android.
+- Android may kill the app while the camera app is in front (low memory). That capture is lost (the call never
+  returns in the new process); the leftover file in the cache is removed on the next capture.
 
 ## What is in the package
 

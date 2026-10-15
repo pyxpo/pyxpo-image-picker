@@ -3,7 +3,13 @@
   "nativeContract": 1,
   "name": "image-picker",
   "native": "ImagePicker",
-  "ios": { "classes": ["ImagePickerModule"] },
+  "ios": {
+    "classes": ["ImagePickerModule"],
+    "infoPlist": {
+      "NSCameraUsageDescription": { "option": "cameraUsageDescription", "default": "Take photos and videos with the camera." },
+      "NSMicrophoneUsageDescription": { "option": "microphoneUsageDescription", "default": "Record sound with the videos you take." }
+    }
+  },
   "android": {
     "namespace": "dev.pyxpo.modules.imagepicker",
     "classes": ["dev.pyxpo.modules.imagepicker.ImagePickerModule"],

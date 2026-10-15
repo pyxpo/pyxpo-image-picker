@@ -1,1 +1,15 @@
-<manifest />
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--
+      No CAMERA permission on purpose: the system camera app (ACTION_IMAGE_CAPTURE / ACTION_VIDEO_CAPTURE) needs none.
+      Android only requires it from apps that declare it; if your app (or another module) declares CAMERA,
+      launchCameraAsync asks for it first.
+    -->
+    <application>
+        <!-- Lets the camera app write the capture into this app's cache without file:// paths (no AndroidX needed). -->
+        <provider
+            android:name="dev.pyxpo.modules.imagepicker.PxCameraFileProvider"
+            android:authorities="${applicationId}.pyxpo.imagepicker"
+            android:exported="false"
+            android:grantUriPermissions="true" />
+    </application>
+</manifest>
