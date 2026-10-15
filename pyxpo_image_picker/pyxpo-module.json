@@ -1,0 +1,11 @@
+{
+  "name": "image-picker",
+  "native": "ImagePicker",
+  "ios": { "classes": ["ImagePickerModule"] },
+  "android": {
+    "namespace": "dev.pyxpo.modules.imagepicker",
+    "classes": ["dev.pyxpo.modules.imagepicker.ImagePickerModule"],
+    "dependencies": [],
+    "minSdk": 24
+  }
+}
