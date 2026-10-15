@@ -1,4 +1,6 @@
 {
+  "schemaVersion": 1,
+  "nativeContract": 1,
   "name": "image-picker",
   "native": "ImagePicker",
   "ios": { "classes": ["ImagePickerModule"] },
