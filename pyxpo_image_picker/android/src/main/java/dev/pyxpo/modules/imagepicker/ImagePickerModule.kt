@@ -27,9 +27,11 @@ class ImagePickerModule : PxModule() {
         if (busy) { reply(null, "a picker is already open"); return }
         val multiple = args.optBoolean(0, false)
         val limit = args.optInt(1, 0)
+        val kinds = args.optString(2, "images")
         val intent = if (Build.VERSION.SDK_INT >= 33) {
             Intent(MediaStore.ACTION_PICK_IMAGES).apply {
-                type = "image/*"
+                // no type = photos and videos
+                if (kinds == "images") type = "image/*" else if (kinds == "videos") type = "video/*"
                 if (multiple) {
                     val max = MediaStore.getPickImagesMaxLimit()
                     putExtra(MediaStore.EXTRA_PICK_IMAGES_MAX, if (limit in 2..max) limit else max)
@@ -37,7 +39,12 @@ class ImagePickerModule : PxModule() {
             }
         } else {
             Intent(Intent.ACTION_GET_CONTENT).apply {
-                type = "image/*"
+                if (kinds == "all") {
+                    type = "*/*"
+                    putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("image/*", "video/*"))
+                } else {
+                    type = if (kinds == "videos") "video/*" else "image/*"
+                }
                 addCategory(Intent.CATEGORY_OPENABLE)
                 putExtra(Intent.EXTRA_ALLOW_MULTIPLE, multiple)
             }
@@ -69,20 +76,39 @@ class ImagePickerModule : PxModule() {
 
     private fun copy(cr: android.content.ContentResolver, uri: Uri, dir: File): Map<String, Any?> {
         val mime = cr.getType(uri) ?: "image/jpeg"
+        val video = mime.startsWith("video/")
         var name: String? = null
         cr.query(uri, arrayOf(OpenableColumns.DISPLAY_NAME), null, null, null)?.use { if (it.moveToFirst()) name = it.getString(0) }
         val ext = (name?.substringAfterLast('.', "") ?: "").ifEmpty { mime.substringAfter('/').replace("jpeg", "jpg") }
         val out = File(dir, UUID.randomUUID().toString() + "." + ext.lowercase())
-        (cr.openInputStream(uri) ?: throw java.io.IOException("cannot open picked image")).use { i -> out.outputStream().use { i.copyTo(it) } }
+        (cr.openInputStream(uri) ?: throw java.io.IOException("cannot open picked file")).use { i -> out.outputStream().use { i.copyTo(it) } }
+        if (video) return videoAsset(out, mime, name)
         val o = android.graphics.BitmapFactory.Options().apply { inJustDecodeBounds = true }
         android.graphics.BitmapFactory.decodeFile(out.path, o)
         val ori = try {
             android.media.ExifInterface(out.path).getAttributeInt(android.media.ExifInterface.TAG_ORIENTATION, 1)
         } catch (e: Exception) { 1 }
         val swap = ori in 5..8
-        return mapOf("uri" to out.absolutePath, "width" to if (swap) o.outHeight else o.outWidth,
+        return mapOf("uri" to out.absolutePath, "type" to "image", "width" to if (swap) o.outHeight else o.outWidth,
             "height" to if (swap) o.outWidth else o.outHeight, "fileSize" to out.length(),
             "mimeType" to mime, "fileName" to (name ?: out.name))
+    }
+
+    private fun videoAsset(out: File, mime: String, name: String?): Map<String, Any?> {
+        val r = android.media.MediaMetadataRetriever()
+        try {
+            r.setDataSource(out.path)
+            fun num(key: Int) = r.extractMetadata(key)?.toIntOrNull() ?: 0
+            val rot = num(android.media.MediaMetadataRetriever.METADATA_KEY_VIDEO_ROTATION)
+            val w = num(android.media.MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH)
+            val h = num(android.media.MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT)
+            val swap = rot == 90 || rot == 270
+            return mapOf("uri" to out.absolutePath, "type" to "video", "width" to if (swap) h else w,
+                "height" to if (swap) w else h, "fileSize" to out.length(), "mimeType" to mime,
+                "fileName" to (name ?: out.name), "duration" to num(android.media.MediaMetadataRetriever.METADATA_KEY_DURATION))
+        } finally {
+            r.release()
+        }
     }
 
     companion object {
