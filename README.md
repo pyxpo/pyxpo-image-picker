@@ -2,7 +2,7 @@
 
 Photo library picker and camera for pyxpo apps (expo-image-picker shape).
 
-This is an optional [pyxpo](https://github.com/ivishalchaubey/pyxpo) native module. Apps that do not
+This is an optional [pyxpo](https://github.com/pyxpo/pyxpo) native module. Apps that do not
 list it carry none of its code, permissions or dependencies.
 
 ## Install

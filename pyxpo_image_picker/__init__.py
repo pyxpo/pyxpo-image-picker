@@ -7,7 +7,7 @@ from typing import Any, Dict, Iterable, List, Optional, Union
 from pyxpo.module_api import (NotSupportedError, call, permission_response, require_linked, require_supported,
                               snake_aliases)
 
-__version__ = "0.1.0"
+__version__ = "0.1.0a1"
 
 _KINDS = ("images", "videos")
 
