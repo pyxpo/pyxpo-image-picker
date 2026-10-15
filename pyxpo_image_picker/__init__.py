@@ -3,9 +3,7 @@ from __future__ import annotations
 
 from typing import Any, Dict
 
-from pyxpo._keys import snake_aliases
-from pyxpo.apis._bridge import call
-from pyxpo.modules import require_linked
+from pyxpo.module_api import call, require_linked, snake_aliases
 
 __version__ = "0.1.0"
 
