@@ -1,5 +1,7 @@
 # pyxpo-image-picker
 
+[![CI](https://github.com/pyxpo/pyxpo-image-picker/actions/workflows/ci.yml/badge.svg)](https://github.com/pyxpo/pyxpo-image-picker/actions/workflows/ci.yml) [![PyPI](https://img.shields.io/pypi/v/pyxpo-image-picker)](https://pypi.org/project/pyxpo-image-picker/) [![Python](https://img.shields.io/pypi/pyversions/pyxpo-image-picker)](https://pypi.org/project/pyxpo-image-picker/) [![License: MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
+
 Pick photos and videos from the library, or capture one with the system camera, in [pyxpo](https://github.com/pyxpo/pyxpo)
 apps written in Python. The API follows [expo-image-picker](https://docs.expo.dev/versions/latest/sdk/imagepicker/).
 Picked and captured files are copied into the app cache, so every `uri` is a plain local path you can show in an `Image`
