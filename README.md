@@ -6,7 +6,7 @@ Picked and captured files are copied into the app cache, so every `uri` is a pla
 or hand to other modules.
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/pyxpo/pyxpo/main/packages/image-picker/docs/images/hero.png" width="820" alt="The system photo picker on Android and the result of a picked photo on iOS">
+  <img src="https://raw.githubusercontent.com/pyxpo/pyxpo-image-picker/main/docs/images/hero.png" width="820" alt="The system photo picker on Android and the result of a picked photo on iOS">
 </p>
 
 ```python
@@ -110,7 +110,7 @@ def Avatar():
 > `use_async(fn, [counter])`. A `lambda: some_coroutine()` only builds the coroutine, and nothing awaits it.
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/pyxpo/pyxpo/main/packages/image-picker/docs/images/result.png" width="720" alt="The picked photo and its details on Android and iOS">
+  <img src="https://raw.githubusercontent.com/pyxpo/pyxpo-image-picker/main/docs/images/result.png" width="720" alt="The picked photo and its details on Android and iOS">
 </p>
 
 ## Library
