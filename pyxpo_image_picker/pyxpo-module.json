@@ -4,6 +4,9 @@
   "name": "image-picker",
   "native": "ImagePicker",
   "ios": {
+    "privacyManifest": {"NSPrivacyAccessedAPITypes": [
+      {"NSPrivacyAccessedAPIType": "NSPrivacyAccessedAPICategoryFileTimestamp", "NSPrivacyAccessedAPITypeReasons": ["C617.1"]}
+    ]},
     "classes": ["ImagePickerModule"],
     "infoPlist": {
       "NSCameraUsageDescription": { "option": "cameraUsageDescription", "default": "Take photos and videos with the camera." },

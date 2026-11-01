@@ -1,6 +1,8 @@
 # Changelog
 
-## Unreleased
+## 0.1.0a3 (2026-11-02)
+
+- iOS: declares the required-reason APIs it uses (`ios.privacyManifest` in `pyxpo-module.json`), so pyxpo 0.1.0a23 and later add them to the app's `PrivacyInfo.xcprivacy` for App Store review.
 
 ## 0.1.0a2
 
